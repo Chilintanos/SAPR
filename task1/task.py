@@ -1,34 +1,37 @@
 import csv
 import sys
 
-if len(sys.argv) != 4:
-    print("Использование: python script.py <путь_к_csv_файлу> <номер_строки> <номер_столбца>")
-    sys.exit(1)
+def main(csv_file, row_num, col_num):
+    try:
+        with open(csv_file, 'r') as file:
+            reader = csv.reader(file)
+            data = list(reader)
 
-csv_file = sys.argv[1]
-row_num = int(sys.argv[2])
-col_num = int(sys.argv[3])
+        value = data[row_num - 1][col_num - 1]
+        return value
+    except FileNotFoundError:
+        print(f"Ошибка: Файл '{csv_file}' не найден.")
+    except IndexError:
+        print("Ошибка: Неверный номер строки или столбца.")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+    return None
 
-try:
-    with open(csv_file, 'r') as file:
-        reader = csv.reader(file)
-        data = list(reader)
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Использование: python script.py <путь_к_csv_файлу> <номер_строки> <номер_столбца>")
+        sys.exit(1)
 
-    value = data[row_num - 1][col_num - 1]
-    print(value)
+    csv_file = sys.argv[1]
+    row_num = int(sys.argv[2])
+    col_num = int(sys.argv[3])
 
-except FileNotFoundError:
-    print(f"Ошибка: Файл '{csv_file}' не найден.")
-except IndexError:
-    print("Ошибка: Неверный номер строки или столбца.")
-except Exception as e:
-    print(f"Произошла ошибка: {e}")
+    result = main(csv_file, row_num, col_num)
+    if result is not None:
+        print(result)
 
-#Чтобы использовать эту программу, вам нужно сохранить ее в файл, например, script.py, и запускать из командной строки следующим образом:
-
+#Чтобы использовать эту программу, нужно сохранить ее в файл и запускать из командной строки следующим образом:
 #python script.py <путь_к_csv_файлу> <номер_строки> <номер_столбца>
-
-
 #Где:
 #- <путь_к_csv_файлу> - полный путь к CSV-файлу
 #- <номер_строки> - номер строки (начиная с 1)
